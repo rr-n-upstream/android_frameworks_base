@@ -425,22 +425,13 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             // Things are not set up yet; reply hazy, ask again later
             return;
         }
-        boolean visible = mUserSetupComplete;
-        if (visible) {
-            if (isTargetCustom(Shortcuts.RIGHT_SHORTCUT)) {
-                visible = !mShortcutHelper.isTargetEmpty(Shortcuts.RIGHT_SHORTCUT);
-	    updateCameraIconColor();
-        updatePhoneIconColor();
-        updateLockIconColor();
-        updateIndicationTextColor();
-            } else {
-                ResolveInfo resolved = resolveCameraIntent();
-                boolean isCameraDisabled =
-                        (mPhoneStatusBar != null) && !mPhoneStatusBar.isCameraAllowedByAdmin();
-                visible = !isCameraDisabled && resolved != null
-                        && getResources().getBoolean(R.bool.config_keyguardShowCameraAffordance);
-            }
-        }
+        ResolveInfo resolved = resolveCameraIntent();
+        boolean isCameraDisabled =
+                (mPhoneStatusBar != null) && !mPhoneStatusBar.isCameraAllowedByAdmin();
+        boolean visible = !isCameraDisabled
+                && resolved != null
+                && getResources().getBoolean(R.bool.config_keyguardShowCameraAffordance)
+                && mUserSetupComplete;
         mCameraImageView.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
